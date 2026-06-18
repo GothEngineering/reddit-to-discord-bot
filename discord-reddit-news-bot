@@ -1,0 +1,16 @@
+#import requests
+
+#WEBHOOK_URL = "https://discord.com/api/webhooks/1516798921173762209/gzWs88854COhZJ0g_ArLkTJZsXtWSe8Bg4aLzdvjb3KXu1SzejF1CorE1yW7FT6HU1GH"
+
+#requests.post(WEBHOOK_URL, json={"content": "metelopapi metelo llegaron los papus"})
+
+import feedparser
+
+SUBREDDIT_URL = "https://www.reddit.com/r/deadbydaylight/"
+
+feed = feedparser.parse(SUBREDDIT_URL)
+
+latest_feed = feed.entries[0]
+
+print("Title: ", latest_feed.title)
+print("Link: ", latest_feed.link)
