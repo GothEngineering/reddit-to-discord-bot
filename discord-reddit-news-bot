@@ -1,17 +1,16 @@
 #import requests
 
-#WEBHOOK_URL = "https://discord.com/api/webhooks/1516798921173762209/gzWs88854COhZJ0g_ArLkTJZsXtWSe8Bg4aLzdvjb3KXu1SzejF1CorE1yW7FT6HU1GH"
-
-#requests.post(WEBHOOK_URL, json={"content": "metelopapi metelo llegaron los papus"})
-
 import feedparser
 import requests
 
+WEBHOOK_URL = "https://discord.com/api/webhooks/1516798921173762209/gzWs88854COhZJ0g_ArLkTJZsXtWSe8Bg4aLzdvjb3KXu1SzejF1CorE1yW7FT6HU1GH"
 
-
-SUBREDDIT_URL_DBD = "https://www.reddit.com/r/deadbydaylight/new/"
+SUBREDDIT_URL_DBD = "https://www.reddit.com/r/deadbydaylight/new/.rss"
 
 SUBREDDIT_URL_VZLA = "https://www.reddit.com/r/venezuela/new/"
+
+
+
 
 header = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'"
@@ -19,21 +18,23 @@ header = {
 
 response = requests.get(SUBREDDIT_URL_DBD, headers=header)
 
-print("HTTPS de mierda: " + str(response.status_code))
-print("respuesta: " + response.text[:200])
+#print("HTTPS de mierda: " + str(response.status_code))
+#print("respuesta: " + response.text[:200])
 
 feed = feedparser.parse(response.text)
 
 
 print("Number of entries: " + str(len(feed.entries)))
 
+latest_feed = feed.entries[0]
 
 if len(feed.entries) > 0:
-    latest_feed = feed.entries[0]
     print("Title: ", latest_feed.title)
     print("Link: ", latest_feed.link)    
 else:
     print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
 
 
+discord_message = "Title: ", latest_feed.title + "Link: ", latest_feed.link
 
+requests.post(WEBHOOK_URL, json={"content": str(discord_message)})
