@@ -1,6 +1,7 @@
 import os
 import feedparser
 import requests
+import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,19 +29,20 @@ print("Number of entries: " + str(len(feed.entries)))
 
 latest_feed = feed.entries[0]
 
-#while True:
+while True:
     
 
 
-if len(feed.entries) > 0:
-    print("Title: ", latest_feed.title)
-    print("Link: ", latest_feed.link)    
-else:
-    print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
+    if len(feed.entries) > 0:
+        print("Title: ", latest_feed.title)
+        print("Link: ", latest_feed.link)    
+    else:
+        print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
 
 
-#discord_message = "Title: ", latest_feed.title + "Link: ", latest_feed.link
-discord_message = "**Papuuu papuuuu un papu post papu, mira papu**\n" + "Title: *" + latest_feed.title + "*\n" + "Link: " + latest_feed.link
+
+    discord_message = "**Papuuu papuuuu un papu post papu, mira papu**\n" + "Title: *" + latest_feed.title + "*\n" + "Link: " + latest_feed.link
 
 
-requests.post(WEBHOOK_URL, json={"content": str(discord_message)})
+    requests.post(WEBHOOK_URL, json={"content": str(discord_message)})
+    time.sleep(60)
