@@ -2,6 +2,7 @@ import os
 import feedparser
 import requests
 import time
+import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,28 +32,33 @@ print("Number of entries: " + str(len(feed.entries)))
 latest_feed = feed.entries[0]
 
 while True:
-
-    # This is just the debug test
-    if len(feed.entries) > 0:
-        print("Title: ", latest_feed.title)
-        print("Link: ", latest_feed.link)    
-        print("ID: ", latest_feed.id)
-    else:
-        print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
+    try:
 
 
-    post_title = latest_feed.title
-    post_link = latest_feed.link
-    post_id = latest_feed.id
+        # This is just the debug test
+        if len(feed.entries) > 0:
+            print("Title: ", latest_feed.title)
+            print("Link: ", latest_feed.link)    
+            print("ID: ", latest_feed.id)
+        else:
+            print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
 
-    if post_id != latest_post:
 
-        discord_message = "**Papuuu papuuuu un papu post papu, mira papu**\n" + "Title: *" + post_title + "*\n" + "Link: " + post_link
-        requests.post(WEBHOOK_URL, json={"content": str(discord_message)})
-        latest_post = post_id
+        post_title = latest_feed.title
+        post_link = latest_feed.link
+        post_id = latest_feed.id
 
-    else:
-        print("No new data retrieved! (probably because it's a duplicate post)")
+        if post_id != latest_post:
 
+            discord_message = "**Papuuu papuuuu un papu post papu, mira papu**\n" + "Title: *" + post_title + "*\n" + "Link: " + post_link
+            requests.post(WEBHOOK_URL, json={"content": str(discord_message)})
+            latest_post = post_id
+
+        else:
+            print("No new data retrieved due to the post being duplicated or an obscure malignant error)")
+
+    except Exception as error:
+        print("se nos ha crasheado chaval que ha pasado")
+        print(datetime.datetime.now())
 
     time.sleep(60)
