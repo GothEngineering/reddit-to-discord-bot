@@ -1,7 +1,13 @@
+import os
 import feedparser
 import requests
+from dotenv import load_dotenv
 
-WEBHOOK_URL = "https://discord.com/api/webhooks/1516798921173762209/gzWs88854COhZJ0g_ArLkTJZsXtWSe8Bg4aLzdvjb3KXu1SzejF1CorE1yW7FT6HU1GH"
+load_dotenv()
+
+post = ""
+
+WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
 
 SUBREDDIT_URL_DBD = "https://www.reddit.com/r/deadbydaylight/new/.rss"
 
@@ -21,6 +27,10 @@ feed = feedparser.parse(response.text)
 print("Number of entries: " + str(len(feed.entries)))
 
 latest_feed = feed.entries[0]
+
+#while True:
+    
+
 
 if len(feed.entries) > 0:
     print("Title: ", latest_feed.title)
