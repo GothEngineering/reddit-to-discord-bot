@@ -3,6 +3,7 @@ import feedparser
 import requests
 import time
 import datetime
+import logging
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,7 +15,7 @@ WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
 
 SUBREDDIT_URL_DBD = "https://www.reddit.com/r/deadbydaylight/new/.rss"
 
-SUBREDDIT_URL_VZLA = "https://www.reddit.com/r/venezuela/new/"
+SUBREDDIT_URL_VZLA = "https://www.reddit.com/r/venezuela/new/.rss"
 
 
 header = {
@@ -30,6 +31,10 @@ feed = feedparser.parse(response.text)
 print("Number of entries: " + str(len(feed.entries)))
 
 latest_feed = feed.entries[0]
+logger = logging.getLogger()
+logging.basicConfig(filename='logs.log', encoding='utf-8', level=logging.INFO)
+
+
 
 while True:
     try:
@@ -60,5 +65,7 @@ while True:
     except Exception as error:
         print("se nos ha crasheado chaval que ha pasado")
         print(datetime.datetime.now())
+
+    #logger.error('This is an error, bozo')
 
     time.sleep(60)
