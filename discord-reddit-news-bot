@@ -22,23 +22,32 @@ header = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36'"
     }
 
-response = requests.get(SUBREDDIT_URL_DBD, headers=header)
+#response = requests.get(SUBREDDIT_URL_DBD, headers=header)
 
 
-feed = feedparser.parse(response.text)
+#feed = feedparser.parse(response.text)
 
 
-print("Number of entries: " + str(len(feed.entries)))
+#print("Number of entries: " + str(len(feed.entries)))
 
-latest_feed = feed.entries[0]
-logger = logging.getLogger()
-logging.basicConfig(filename = 'logs.log', encoding = 'utf-8', level = logging.INFO, format = "[%(levelname)s]  %(asctime)s | %(message)s")
+#latest_feed = feed.entries[0]
+#logger = logging.getLogger()
+#logging.basicConfig(filename = 'logs.log', encoding = 'utf-8', level = logging.INFO, format = "[%(levelname)s]  %(asctime)s | %(message)s")
 
 
 
 while True:
     try:
-        #logger.info("Searching the page...")
+        response = requests.get(SUBREDDIT_URL_DBD, headers=header)
+        feed = feedparser.parse(response.text)
+
+
+        #print("Number of entries: " + str(len(feed.entries)))
+
+        latest_feed = feed.entries[0]
+        logger = logging.getLogger()
+        logging.basicConfig(filename = 'logs.log', encoding = 'utf-8', level = logging.INFO, format = "[%(levelname)s]  %(asctime)s | %(message)s")
+
 
         # This is just the debug test
         if len(feed.entries) > 0:
@@ -46,7 +55,9 @@ while True:
             logger.info(f"Title: {latest_feed.title}, Link: {latest_feed.link}, ID: {latest_feed.id}") 
 
         else:
-            print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
+            # Cute print using the Godot structure, oh I feel nostalgia
+            #print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
+            print(f"The page {SUBREDDIT_URL_DBD} had an error and we couldn't reach it. Maybe it's down or we did too many requests")
             logger.warning("Nothing found, the page is down or we did too many requests")
 
         post_title = latest_feed.title
@@ -55,7 +66,7 @@ while True:
         print(f"La ID del post: {post_id}, y la ultima ID guardada en la variable: {latest_post}")
 
         if post_id != latest_post:
-            # I am 48% sure this is the part that doesn't change the ID and it ends up staying the same forever, find a way to fix it
+            
             discord_message = "**Papuuu papuuuu un papu post papu, mira papu**\n" + "Title: *" + post_title + "*\n" + "Link: " + post_link
             requests.post(WEBHOOK_URL, json={"content": str(discord_message)})
             print(f"Imprimiendo: {latest_post}")
