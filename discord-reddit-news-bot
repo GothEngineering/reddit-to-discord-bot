@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+global latest_post
 latest_post = None
-
 
 WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK")
 
@@ -46,25 +46,27 @@ while True:
             logger.info(f"Title: {latest_feed.title}, Link: {latest_feed.link}, ID: {latest_feed.id}") 
 
         else:
-    
             print("nos blokiaron los de: " + str(SUBREDDIT_URL_DBD) + ", bro puta pagina de mierda")
             logger.warning("Nothing found, the page is down or we did too many requests")
 
         post_title = latest_feed.title
         post_link = latest_feed.link
         post_id = latest_feed.id
+        print(f"La ID del post: {post_id}, y la ultima ID guardada en la variable: {latest_post}")
 
         if post_id != latest_post:
-
+            # I am 48% sure this is the part that doesn't change the ID and it ends up staying the same forever, find a way to fix it
             discord_message = "**Papuuu papuuuu un papu post papu, mira papu**\n" + "Title: *" + post_title + "*\n" + "Link: " + post_link
             requests.post(WEBHOOK_URL, json={"content": str(discord_message)})
+            print(f"Imprimiendo: {latest_post}")
             latest_post = post_id
             logger.info("Found a new post, yummy")
 
         else:
             logger.info("Didn't find a new post")
+            print("Didn't find a new post")
 
     except Exception as error:
         logger.error("This is an error, something went VERY bad LMAO")
 
-    time.sleep(60)
+    time.sleep(20)
